@@ -396,6 +396,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/client-ec2@npm:^3.1000.0":
+  version: 3.1000.0
+  resolution: "@aws-sdk/client-ec2@npm:3.1000.0"
+  dependencies:
+    "@aws-crypto/sha256-browser": "npm:5.2.0"
+    "@aws-crypto/sha256-js": "npm:5.2.0"
+    "@aws-sdk/core": "npm:^3.973.15"
+    "@aws-sdk/credential-provider-node": "npm:^3.972.14"
+    "@aws-sdk/middleware-host-header": "npm:^3.972.6"
+    "@aws-sdk/middleware-logger": "npm:^3.972.6"
+    "@aws-sdk/middleware-recursion-detection": "npm:^3.972.6"
+    "@aws-sdk/middleware-sdk-ec2": "npm:^3.972.11"
+    "@aws-sdk/middleware-user-agent": "npm:^3.972.15"
+    "@aws-sdk/region-config-resolver": "npm:^3.972.6"
+    "@aws-sdk/types": "npm:^3.973.4"
+    "@aws-sdk/util-endpoints": "npm:^3.996.3"
+    "@aws-sdk/util-user-agent-browser": "npm:^3.972.6"
+    "@aws-sdk/util-user-agent-node": "npm:^3.973.0"
+    "@smithy/config-resolver": "npm:^4.4.9"
+    "@smithy/core": "npm:^3.23.6"
+    "@smithy/fetch-http-handler": "npm:^5.3.11"
+    "@smithy/hash-node": "npm:^4.2.10"
+    "@smithy/invalid-dependency": "npm:^4.2.10"
+    "@smithy/middleware-content-length": "npm:^4.2.10"
+    "@smithy/middleware-endpoint": "npm:^4.4.20"
+    "@smithy/middleware-retry": "npm:^4.4.37"
+    "@smithy/middleware-serde": "npm:^4.2.11"
+    "@smithy/middleware-stack": "npm:^4.2.10"
+    "@smithy/node-config-provider": "npm:^4.3.10"
+    "@smithy/node-http-handler": "npm:^4.4.12"
+    "@smithy/protocol-http": "npm:^5.3.10"
+    "@smithy/smithy-client": "npm:^4.12.0"
+    "@smithy/types": "npm:^4.13.0"
+    "@smithy/url-parser": "npm:^4.2.10"
+    "@smithy/util-base64": "npm:^4.3.1"
+    "@smithy/util-body-length-browser": "npm:^4.2.1"
+    "@smithy/util-body-length-node": "npm:^4.2.2"
+    "@smithy/util-defaults-mode-browser": "npm:^4.3.36"
+    "@smithy/util-defaults-mode-node": "npm:^4.2.39"
+    "@smithy/util-endpoints": "npm:^3.3.1"
+    "@smithy/util-middleware": "npm:^4.2.10"
+    "@smithy/util-retry": "npm:^4.2.10"
+    "@smithy/util-utf8": "npm:^4.2.1"
+    "@smithy/util-waiter": "npm:^4.2.10"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/29a8a5e52c2ed546f0f8920ce622790f043c21fbd4d54269a4c08fec22b071e03d001dda7ead8c2355f52aa4c59d6c4d6f33a09d2dc33018a7283329f0960adf
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/client-s3@npm:^3.350.0":
   version: 3.1000.0
   resolution: "@aws-sdk/client-s3@npm:3.1000.0"
@@ -825,6 +874,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/middleware-sdk-ec2@npm:^3.972.11":
+  version: 3.972.11
+  resolution: "@aws-sdk/middleware-sdk-ec2@npm:3.972.11"
+  dependencies:
+    "@aws-sdk/types": "npm:^3.973.4"
+    "@aws-sdk/util-format-url": "npm:^3.972.6"
+    "@smithy/middleware-endpoint": "npm:^4.4.20"
+    "@smithy/protocol-http": "npm:^5.3.10"
+    "@smithy/signature-v4": "npm:^5.3.10"
+    "@smithy/smithy-client": "npm:^4.12.0"
+    "@smithy/types": "npm:^4.13.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/c1c48723b36884ddbc12c814e396174c2118a2cc6143581c2662457d6e8f22c684dac725bb8c80de970a889df98bd8596fdc7875051c2f371c6417fccb8569de
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/middleware-sdk-s3@npm:^3.972.15":
   version: 3.972.15
   resolution: "@aws-sdk/middleware-sdk-s3@npm:3.972.15"
@@ -1000,6 +1065,18 @@ __metadata:
     "@smithy/util-endpoints": "npm:^3.3.1"
     tslib: "npm:^2.6.2"
   checksum: 10c0/a8fa65d58c66de68c71085eb622f16fcb86c37e558a1e7a1ceeb6eb3ca0495e3920e54bcc8f53045ef8931d6298dc2e10ea759cffe8d41965359988ea9d99346
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/util-format-url@npm:^3.972.6":
+  version: 3.972.6
+  resolution: "@aws-sdk/util-format-url@npm:3.972.6"
+  dependencies:
+    "@aws-sdk/types": "npm:^3.973.4"
+    "@smithy/querystring-builder": "npm:^4.2.10"
+    "@smithy/types": "npm:^4.13.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/e752084629e5be6923623336e1d7c6c3a509fc98214cf405b993b0850841ffd4b2f903fb8b4ca1a73be3e9fb300b3e94ca63c358e7a7e5e855e11aa7dcdbaf7a
   languageName: node
   linkType: hard
 
@@ -5638,6 +5715,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@internal/backstage-plugin-resource-actionhub-backend@workspace:plugins/resource-actionhub-backend"
   dependencies:
+    "@aws-sdk/client-ec2": "npm:^3.1000.0"
     "@backstage/backend-defaults": "npm:^0.15.2"
     "@backstage/backend-plugin-api": "npm:^1.7.0"
     "@backstage/backend-test-utils": "npm:^1.11.0"
