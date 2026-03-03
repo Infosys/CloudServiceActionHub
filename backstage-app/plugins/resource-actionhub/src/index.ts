@@ -1,1 +1,2 @@
-export { resourceActionhubPlugin, ResourceActionhubPage } from './plugin';
+export { resourceActionhubPlugin, rootRouteRef } from './plugin';
+export {ResourceActionHubPage} from './components/ResourceActionHubPage';

@@ -1,9 +1,8 @@
-import {
-  createPlugin,
-  createRoutableExtension,
-} from '@backstage/core-plugin-api';
+import { createPlugin, createRouteRef } from '@backstage/core-plugin-api';
 
-import { rootRouteRef } from './routes';
+export const rootRouteRef = createRouteRef({
+  id: 'resource-actionhub',
+});
 
 export const resourceActionhubPlugin = createPlugin({
   id: 'resource-actionhub',
@@ -12,11 +11,4 @@ export const resourceActionhubPlugin = createPlugin({
   },
 });
 
-export const ResourceActionhubPage = resourceActionhubPlugin.provide(
-  createRoutableExtension({
-    name: 'ResourceActionhubPage',
-    component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
-    mountPoint: rootRouteRef,
-  }),
-);
+
