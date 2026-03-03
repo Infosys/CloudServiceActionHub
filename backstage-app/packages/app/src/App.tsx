@@ -37,7 +37,7 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { NotificationsPage } from '@backstage/plugin-notifications';
 import { SignalsDisplay } from '@backstage/plugin-signals';
-import { ResourceActionhubPage } from '@internal/backstage-plugin-resource-actionhub';
+import { ResourceActionHubPage } from '@internal/backstage-plugin-resource-actionhub';
 
 const app = createApp({
   apis,
@@ -98,7 +98,7 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/notifications" element={<NotificationsPage />} />
-    <Route path="/resource-actionhub" element={<ResourceActionhubPage />} />
+    <Route path="/resource-actionhub" element={<ResourceActionHubPage />} />
   </FlatRoutes>
 );
 
