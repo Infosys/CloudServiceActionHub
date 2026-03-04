@@ -21,7 +21,7 @@ export function FormSection() {
   const [service, setService] = useState('');
   const [account, setAccount] = useState('');
   const [project, setProject] = useState('');
-  const [region, setRegion] = useState<string[]>([]);
+  const [region, setRegion] = useState('');
   const [allRegions, setAllRegions] = useState<string[]>([]);
   const [projects, setProjects] = useState<string[]>([]);
   const [loadingAccounts, setLoadingAccounts] = useState(false);
@@ -38,7 +38,7 @@ export function FormSection() {
   const showFields = !!provider;
 
   // Dynamic labels based on provider
-  const awsServices = ['EC2', 'RDS'];
+  const awsServices = ['EC2'];
   const serviceLabel = provider === 'Azure' ? 'AzureService' : 'Service';
   const regionLabel = provider === 'Azure' ? 'AzureRegion' : provider === 'GCP' ? 'Location' : 'Region';
   const serviceOptions = awsServices;
@@ -169,7 +169,7 @@ export function FormSection() {
     }
 
     try {
-      const backendUrl = await discoveryApi.getBaseUrl('ccd-resource-explorer');
+      const backendUrl = await discoveryApi.getBaseUrl('resource-actionhub');
 
       // Prepare API payload
       const payload: any = {
@@ -242,7 +242,7 @@ export function FormSection() {
       };
 
       try {
-        const backendUrl = await discoveryApi.getBaseUrl('ccd-resource-explorer');
+        const backendUrl = await discoveryApi.getBaseUrl('resource-actionhub');
 
         // Determine which action endpoint to use based on service
         const actionEndpoint = provider === 'GCP' ? 'gcp-action' : service === 'RDS' ? 'rds-action' : 'ec2-action';
@@ -317,7 +317,7 @@ async function fetchRegion(provider: any): Promise<string[]> {
     if (!provider) {
       return [];
     }
-   const backendUrl = await discoveryApi.getBaseUrl('ccd-resource-explorer');
+  const backendUrl = await discoveryApi.getBaseUrl('resource-actionhub');
 
     // Call the API to fetch AWS regions
     const response = await fetch(`${backendUrl}/getAllAwsRegions`, {
@@ -378,6 +378,7 @@ const getColumnDisplayName = (columnKey: string, service: string): string => {
               setService('');
               setAccount('');
               setProject('');
+              setRegion('');
               setAllRegions([]);
               setTableData([]);
               setError(undefined);
@@ -385,8 +386,8 @@ const getColumnDisplayName = (columnKey: string, service: string): string => {
           >
             <MenuItem value="">Select provider</MenuItem>
             <MenuItem value="AWS">AWS</MenuItem>
-            <MenuItem value="Azure">Azure</MenuItem>
-            <MenuItem value="GCP">GCP</MenuItem>
+            {/* <MenuItem value="Azure">Azure</MenuItem>
+            <MenuItem value="GCP">GCP</MenuItem> */}
           </Select>
         </FormControl>
 
@@ -402,6 +403,7 @@ const getColumnDisplayName = (columnKey: string, service: string): string => {
                 setService(e.target.value as string);
                 setAccount('');
                 setProject('');
+                setRegion('');
               }}
             >
               <MenuItem value="">Select {serviceLabel}</MenuItem>
@@ -463,7 +465,7 @@ const getColumnDisplayName = (columnKey: string, service: string): string => {
               labelId="region-label"
               value={region}
               label={regionLabel}
-              onChange={e => setRegion([e.target.value as string])}
+              onChange={e => setRegion(e.target.value as string)}
             >
               <MenuItem value="">Select {regionLabel}</MenuItem>
               {allRegions.map(opt => (

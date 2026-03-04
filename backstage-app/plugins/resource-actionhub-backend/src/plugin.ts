@@ -3,10 +3,9 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './router';
-import { todoListServiceRef } from './services/TodoListService';
 
 /**
- * resourceActionhubPlugin backend plugin
+ * Start Stop Hub backend plugin
  *
  * @public
  */
@@ -15,17 +14,50 @@ export const resourceActionhubPlugin = createBackendPlugin({
   register(env) {
     env.registerInit({
       deps: {
-        httpAuth: coreServices.httpAuth,
+        logger: coreServices.logger,
+        config: coreServices.rootConfig,
         httpRouter: coreServices.httpRouter,
-        todoList: todoListServiceRef,
+        httpAuth: coreServices.httpAuth,
       },
-      async init({ httpAuth, httpRouter, todoList }) {
-        httpRouter.use(
-          await createRouter({
-            httpAuth,
-            todoList,
-          }),
-        );
+      async init({ logger, config, httpRouter, httpAuth }) {
+        logger.info('Initializing Start Stop Hub backend plugin');
+
+        // Set auth policies first, before mounting the router
+        httpRouter.addAuthPolicy({
+          path: '/health',
+          allow: 'unauthenticated'
+        });
+        httpRouter.addAuthPolicy({
+          path: '/resources',
+          allow: 'unauthenticated'
+        });
+        httpRouter.addAuthPolicy({
+          path: '/ec2-action',
+          allow: 'unauthenticated'
+        });
+        httpRouter.addAuthPolicy({
+          path: '/rds-action',
+          allow: 'unauthenticated'
+        });
+        httpRouter.addAuthPolicy({
+          path: '/gcp-action',
+          allow: 'unauthenticated'
+        });
+         httpRouter.addAuthPolicy({
+          path: '/getAllAwsRegions',
+          allow: 'unauthenticated'
+        });
+
+        // Create and mount the router
+        const router = await createRouter({
+          logger,
+          config,
+          httpAuth,
+        });
+
+        httpRouter.use(router);
+
+        logger.info('Start Stop Hub backend plugin initialized successfully');
       },
     });
   },

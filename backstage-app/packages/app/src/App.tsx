@@ -37,7 +37,7 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { NotificationsPage } from '@backstage/plugin-notifications';
 import { SignalsDisplay } from '@backstage/plugin-signals';
-import { ResourceActionHubPage } from '@internal/backstage-plugin-resource-actionhub';
+import { ResourceActionHubPage } from '@infosys_ltd/resource-actionhub';
 
 const app = createApp({
   apis,
