@@ -115,7 +115,7 @@ permission:
   # setting this to `false` will disable permissions
   enabled: true
 
-# Start Stop Hub Plugin Configuration
+# Cloud Reseorce Action Hub Plugin Configuration
 # Configure your cloud provider API endpoints here
 resource-actionhub:
   aws:

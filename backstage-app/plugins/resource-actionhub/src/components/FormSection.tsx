@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField, InputAdornment } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { useApi, discoveryApiRef, alertApiRef, identityApiRef, ProfileInfo } from '@backstage/core-plugin-api';
@@ -40,7 +40,12 @@ export function FormSection() {
   // Dynamic labels based on provider
   const awsServices = ['EC2'];
   const serviceLabel = provider === 'Azure' ? 'AzureService' : 'Service';
-  const regionLabel = provider === 'Azure' ? 'AzureRegion' : provider === 'GCP' ? 'Location' : 'Region';
+  const getRegionLabel = (p: string) => {
+    if (p === 'Azure') return 'AzureRegion';
+    if (p === 'GCP') return 'Location';
+    return 'Region';
+  };
+  const regionLabel = getRegionLabel(provider);
   const serviceOptions = awsServices;
 
   // Snackbar state for notifications
@@ -100,16 +105,43 @@ export function FormSection() {
   // Get table columns dynamically from data
   const columns = rowCount > 0 ? Object.keys(data[0]) : [];
 
+  // Function to fetch available AWS Region
+  const fetchRegion = useCallback(async (currentProvider: string): Promise<string[]> => {
+    try {
+      if (!currentProvider) {
+        return [];
+      }
+      const backendUrl = await discoveryApi.getBaseUrl('resource-actionhub');
+
+      const response = await fetch(`${backendUrl}/getAllAwsRegions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch AWS regions: ${response.status}`);
+      }
+
+      const regionData = await response.json();
+      setAllRegions(regionData);
+
+      return [];
+    } catch (_err) {
+      return [];
+    }
+  }, [discoveryApi]);
+
   // Effect to fetch project IDs when account is selected
   useEffect(() => {
-    provider === 'AWS' && fetchRegion(provider);
+    if (provider === 'AWS') {
+      fetchRegion(provider);
+    }
     if (account && provider === 'GCP') {
-      console.log('Account selected:', account);
       setLoadingAccounts(true);
     } else if (!account) {
       setProjects([]);
     }
-  }, [account, provider]);
+  }, [account, provider, fetchRegion]);
 
   // Search effect that triggers on every input change
   useEffect(() => {
@@ -190,12 +222,12 @@ export function FormSection() {
 
       if (!resp.ok) throw new Error(`Backend error ${resp.status}`);
 
-      const data = await resp.json();
-      if (data.success && Array.isArray(data.data)) {
-        setTableData(data.data);
-        setFilteredData(data.data);
-      } else if (data.error) {
-        setError(data.error || 'Backend error');
+      const responseData = await resp.json();
+      if (responseData.success && Array.isArray(responseData.data)) {
+        setTableData(responseData.data);
+        setFilteredData(responseData.data);
+      } else if (responseData.error) {
+        setError(responseData.error || 'Backend error');
       } else {
         setError('Unexpected response');
       }
@@ -245,7 +277,12 @@ export function FormSection() {
         const backendUrl = await discoveryApi.getBaseUrl('resource-actionhub');
 
         // Determine which action endpoint to use based on service
-        const actionEndpoint = provider === 'GCP' ? 'gcp-action' : service === 'RDS' ? 'rds-action' : 'ec2-action';
+        const getActionEndpoint = () => {
+          if (provider === 'GCP') return 'gcp-action';
+          if (service === 'RDS') return 'rds-action';
+          return 'ec2-action';
+        };
+        const actionEndpoint = getActionEndpoint();
 
         const resp = await fetch(`${backendUrl}/${actionEndpoint}`, {
           method: 'POST',
@@ -264,8 +301,8 @@ export function FormSection() {
           setSnackbarMessage(`Error: Instance could not be ${errorMessages[action]}. Please verify and retry.`);
         }
 
-        const data = await resp.json();
-      } catch (error) {
+        await resp.json();
+      } catch (_err) {
         setSeverity('error');
         setSnackbarMessage(`Error: Instance could not be ${errorMessages[action]}. Please verify and retry.`);
         setSnackbarOpen(true);
@@ -311,40 +348,11 @@ export function FormSection() {
     return 'Search...';
   };
 
-  // Function to fetch available AWS Region
-async function fetchRegion(provider: any): Promise<string[]> {
-  try {
-    if (!provider) {
-      return [];
-    }
-  const backendUrl = await discoveryApi.getBaseUrl('resource-actionhub');
-
-    // Call the API to fetch AWS regions
-    const response = await fetch(`${backendUrl}/getAllAwsRegions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // body: JSON.stringify(payload),
-      });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch AWS regions: ${response.status}`);
-    }
-
-    const data = await response.json();
-     setAllRegions(data);
-    
-    return [];
-  } catch (error) {
-    console.error('Error fetching GCP project IDs:', error);
-    return [];
-  }
-}
-
 // Column mapping for display names - updated for RDS
-const getColumnDisplayName = (columnKey: string, service: string): string => {
+const getColumnDisplayName = (columnKey: string, svc: string): string => {
   const columnMap: Record<string, string> = {
     // EC2 columns
-    instanceName: service === 'RDS' ? 'Instance Name' : 'Instance Id',
+    instanceName: svc === 'RDS' ? 'Instance Name' : 'Instance Id',
     ip: 'IP Address',
     hostname: 'Hostname',
     status: 'Status',
@@ -442,9 +450,9 @@ const getColumnDisplayName = (columnKey: string, service: string): string => {
                 />
               )}
               noOptionsText={loadingAccounts ? 'Loading...' : 'No Project ID found'}
-              filterOptions={(options, { inputValue }) => {
+              filterOptions={(options, { inputValue: filterValue }) => {
                 return options.filter(option =>
-                  option.toLowerCase().includes(inputValue.toLowerCase())
+                  option.toLowerCase().includes(filterValue.toLowerCase())
                 );
               }}
               style={{ width: 250 }}

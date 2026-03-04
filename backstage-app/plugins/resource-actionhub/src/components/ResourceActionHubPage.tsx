@@ -4,9 +4,7 @@ import { Header } from '@backstage/core-components';
 
 export const ResourceActionHubPage = () => (
   <Page themeId="tool">
-    <Header
-            title={'Start Stop Hub'}
-          />
+    <Header title="Cloud Reseorce Action Hub" />
     <Content>
       <FormSection />
     </Content>

@@ -1,5 +1,5 @@
 /**
- * Start Stop Hub Backend Plugin - Type Definitions
+ * Cloud Reseorce Action Hub Backend Plugin - Type Definitions
  * @packageDocumentation
  */
 
