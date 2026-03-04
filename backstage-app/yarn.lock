@@ -5696,24 +5696,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/external-editor@npm:^1.0.0":
-  version: 1.0.3
-  resolution: "@inquirer/external-editor@npm:1.0.3"
-  dependencies:
-    chardet: "npm:^2.1.1"
-    iconv-lite: "npm:^0.7.0"
-  peerDependencies:
-    "@types/node": ">=18"
-  peerDependenciesMeta:
-    "@types/node":
-      optional: true
-  checksum: 10c0/82951cb7f3762dd78cca2ea291396841e3f4adfe26004b5badfed1cec4b6a04bb567dff94d0e41b35c61bdd7957317c64c22f58074d14b238d44e44d9e420019
-  languageName: node
-  linkType: hard
-
-"@internal/backstage-plugin-resource-actionhub-backend@workspace:^, @internal/backstage-plugin-resource-actionhub-backend@workspace:plugins/resource-actionhub-backend":
+"@infosys_ltd/resource-actionhub-backend@workspace:^, @infosys_ltd/resource-actionhub-backend@workspace:plugins/resource-actionhub-backend":
   version: 0.0.0-use.local
-  resolution: "@internal/backstage-plugin-resource-actionhub-backend@workspace:plugins/resource-actionhub-backend"
+  resolution: "@infosys_ltd/resource-actionhub-backend@workspace:plugins/resource-actionhub-backend"
   dependencies:
     "@aws-sdk/client-ec2": "npm:^3.1000.0"
     "@backstage/backend-defaults": "npm:^0.15.2"
@@ -5733,9 +5718,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@internal/backstage-plugin-resource-actionhub@workspace:^, @internal/backstage-plugin-resource-actionhub@workspace:plugins/resource-actionhub":
+"@infosys_ltd/resource-actionhub@workspace:^, @infosys_ltd/resource-actionhub@workspace:plugins/resource-actionhub":
   version: 0.0.0-use.local
-  resolution: "@internal/backstage-plugin-resource-actionhub@workspace:plugins/resource-actionhub"
+  resolution: "@infosys_ltd/resource-actionhub@workspace:plugins/resource-actionhub"
   dependencies:
     "@backstage/cli": "npm:^0.35.4"
     "@backstage/core-app-api": "npm:^1.19.5"
@@ -5761,6 +5746,21 @@ __metadata:
     react-router-dom: ^6.0.0
   languageName: unknown
   linkType: soft
+
+"@inquirer/external-editor@npm:^1.0.0":
+  version: 1.0.3
+  resolution: "@inquirer/external-editor@npm:1.0.3"
+  dependencies:
+    chardet: "npm:^2.1.1"
+    iconv-lite: "npm:^0.7.0"
+  peerDependencies:
+    "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  checksum: 10c0/82951cb7f3762dd78cca2ea291396841e3f4adfe26004b5badfed1cec4b6a04bb567dff94d0e41b35c61bdd7957317c64c22f58074d14b238d44e44d9e420019
+  languageName: node
+  linkType: hard
 
 "@internationalized/date@npm:^3.11.0":
   version: 3.11.0
@@ -15030,7 +15030,7 @@ __metadata:
     "@backstage/test-utils": "npm:^1.7.15"
     "@backstage/theme": "npm:^0.7.2"
     "@backstage/ui": "npm:^0.12.0"
-    "@internal/backstage-plugin-resource-actionhub": "workspace:^"
+    "@infosys_ltd/resource-actionhub": "workspace:^"
     "@material-ui/core": "npm:^4.12.2"
     "@material-ui/icons": "npm:^4.9.1"
     "@playwright/test": "npm:^1.32.3"
@@ -15654,7 +15654,7 @@ __metadata:
     "@backstage/plugin-search-backend-node": "npm:^1.4.1"
     "@backstage/plugin-signals-backend": "npm:^0.3.12"
     "@backstage/plugin-techdocs-backend": "npm:^2.1.5"
-    "@internal/backstage-plugin-resource-actionhub-backend": "workspace:^"
+    "@infosys_ltd/resource-actionhub-backend": "workspace:^"
     app: "link:../app"
     better-sqlite3: "npm:^12.0.0"
     node-gyp: "npm:^10.0.0"

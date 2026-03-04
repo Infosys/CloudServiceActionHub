@@ -46,7 +46,6 @@ export async function createRouter(
     aws: {
       accessKeyId: pluginConfig?.getOptionalString('aws.accessKeyId') || '',
       secretAccessKey: pluginConfig?.getOptionalString('aws.secretAccessKey') || '',
-      sessionToken: pluginConfig?.getOptionalString('aws.sessionToken') || '',
       region: pluginConfig?.getOptionalString('aws.region') || '',
       ec2: {
         url: pluginConfig?.getOptionalString('aws.ec2.url') || '',
@@ -135,18 +134,49 @@ export async function createRouter(
   }
 });
 
-  // New GCP Compute Engine action endpoint
-  router.post('/getAllAwsRegions', async (req, res) => {
-    // Get region from app-config.yaml
-    const pluginConfig = req.app.get('config')?.getOptionalConfig('resource-actionhub');
-    const awsRegion = pluginConfig?.getOptionalString('aws.region') || 'us-east-1';
-    const client = new EC2Client({ region: awsRegion });
-    const command = new DescribeRegionsCommand({ AllRegions: true });
-    const response = await client.send(command);
-    const regions = Array.isArray(response.Regions)
-      ? response.Regions.map(r => r.RegionName).filter((name): name is string => typeof name === 'string')
-      : [];
-    res.json(regions);
+  router.post('/getAllAwsRegions', async (_req, res) => {
+    try {
+      const awsConfig = (globalThis as any).apiConfig?.aws || {};
+      const awsRegion = awsConfig.region || 'us-east-1';
+
+      if (!awsConfig.accessKeyId || !awsConfig.secretAccessKey) {
+        throw new InputError('AWS credentials are required to fetch regions');
+      }
+
+      const client = new EC2Client({
+        region: awsRegion,
+        credentials: {
+          accessKeyId: awsConfig.accessKeyId,
+          secretAccessKey: awsConfig.secretAccessKey,
+        },
+      });
+
+      const command = new DescribeRegionsCommand({ AllRegions: true });
+      const response = await client.send(command);
+      const regions = Array.isArray(response.Regions)
+        ? response.Regions.map(r => r.RegionName).filter((name): name is string => typeof name === 'string')
+        : [];
+      return res.json(regions);
+    } catch (error: any) {
+      logger.error(`Error fetching AWS regions: ${error}`);
+
+      if (error instanceof InputError) {
+        return res.status(400).json({ success: false, error: error.message });
+      }
+
+      const errorCode = error?.name || error?.Code || error?.Error?.Code;
+      if (errorCode === 'AuthFailure' || errorCode === 'InvalidClientTokenId' || errorCode === 'RequestExpired') {
+        return res.status(401).json({
+          success: false,
+          error: 'AWS was not able to validate the provided access credentials',
+        });
+      }
+
+      return res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch AWS regions',
+      });
+    }
   });
 
   router.post('/rds-action', async (req, res) => {
@@ -298,7 +328,6 @@ async function fetchAwsEc2Instances(
       credentials: {
         accessKeyId: awsConfig.accessKeyId || '',
         secretAccessKey: awsConfig.secretAccessKey || '',
-        sessionToken: awsConfig.sessionToken || undefined,
       },
     });
     const result: DescribeInstancesCommandOutput = await ec2.send(new DescribeInstancesCommand({}));
