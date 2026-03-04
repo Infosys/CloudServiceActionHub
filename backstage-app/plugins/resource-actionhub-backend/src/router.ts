@@ -294,7 +294,7 @@ async function fetchAwsEc2Instances(
       logger.error('AWS credentials are missing in config!');
     }
     const ec2 = new EC2Client({
-      region: awsConfig.region || request.region,
+      region: request.region || awsConfig.region,
       credentials: {
         accessKeyId: awsConfig.accessKeyId || '',
         secretAccessKey: awsConfig.secretAccessKey || '',
@@ -323,8 +323,17 @@ async function fetchAwsEc2Instances(
       success: true,
       data: instances,
     };
-  } catch (error) {
+  } catch (error: any) {
     logger.error(`Failed to fetch AWS EC2 instances: ${error}`);
+    // Handle AWS auth/region errors gracefully - return empty results instead of error
+    const errorName = error?.name || '';
+    if (errorName === 'AuthFailure' || errorName === 'RequestExpired' || errorName === 'InvalidClientTokenId') {
+      logger.warn(`AWS credential/region issue for region ${request.region}, returning empty results`);
+      return {
+        success: true,
+        data: [],
+      };
+    }
     throw error;
   }
 }
