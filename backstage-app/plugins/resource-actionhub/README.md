@@ -4,19 +4,19 @@ This plugin backend was templated using the Backstage CLI. You should replace th
 
 ## Installation
 
-This plugin is installed via the `@infosys_ltd/resource-actionhub-backend` package. To install it to your backend package, run the following command:
+Install both Resource ActionHub packages:
 
 ```bash
 # From your root directory
+yarn --cwd packages/app add @infosys_ltd/resource-actionhub
 yarn --cwd packages/backend add @infosys_ltd/resource-actionhub-backend
 ```
+Set AWS environment variables before running Backstage:
 
-Then add the plugin to your backend in `packages/backend/src/index.ts`:
-
-```ts
-const backend = createBackend();
-// ...
-backend.add(import('@infosys_ltd/resource-actionhub-backend'));
+```bash
+export AWS_ACCESS_KEY_ID="<your-access-key-id>"
+export AWS_SECRET_ACCESS_KEY="<your-secret-access-key>"
+export AWS_REGION="<your-region>"
 ```
 
 ## Development
