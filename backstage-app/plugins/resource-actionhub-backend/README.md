@@ -1,28 +1,57 @@
-# resource-actionhub
+# Resource ActionHub Plugin for Backstage
 
-This plugin backend was templated using the Backstage CLI. You should replace this text with a description of your plugin backend.
+The Resource ActionHub Plugin for Backstage helps teams discover and operate cloud resources directly from Backstage.
+It currently supports AWS EC2 instance listing and actions (`start`, `stop`, `reboot`).
 
 ## Installation
 
-Install both Resource ActionHub packages:
+Install both Resource ActionHub packages from your Backstage root:
 
 ```bash
-# From your root directory
 yarn --cwd packages/app add @infosys_ltd/resource-actionhub
 yarn --cwd packages/backend add @infosys_ltd/resource-actionhub-backend
 ```
-Set AWS environment variables before running Backstage:
+
+## Configuration
+
+### Backend Configuration
+
+Add backend plugin registration in `packages/backend/src/index.ts`:
+
+```ts
+backend.add(import('@infosys_ltd/resource-actionhub-backend'));
+```
+
+Set backend environment variables:
 
 ```bash
 export AWS_ACCESS_KEY_ID="<your-access-key-id>"
 export AWS_SECRET_ACCESS_KEY="<your-secret-access-key>"
-export AWS_REGION="<your-region>"
+export AWS_REGION="us-east-1"
 ```
 
-## Development
+### Frontend Configuration
 
-This plugin backend can be started in a standalone mode from directly in this
-package with `yarn start`. It is a limited setup that is most convenient when
-developing the plugin backend itself.
+Add frontend page route in `packages/app/src/App.tsx`:
 
-If you want to run the entire project, including the frontend, run `yarn start` from the root directory.
+```tsx
+import { ResourceActionHubPage } from '@infosys_ltd/resource-actionhub';
+
+<Route path="/resource-actionhub" element={<ResourceActionHubPage />} />
+```
+
+### Run
+
+```bash
+yarn start
+```
+
+Open `http://localhost:3000/resource-actionhub`.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for improvements or bug fixes.
+
+## License
+
+This project is licensed under the Apache License 2.0.
