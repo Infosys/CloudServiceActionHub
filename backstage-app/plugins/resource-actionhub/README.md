@@ -1,52 +1,28 @@
-# Resource ActionHub Plugin for Backstage
+# resource-actionhub
 
-The Resource ActionHub Plugin for Backstage helps teams discover and operate cloud resources directly from Backstage.
-It currently supports AWS EC2 instance listing and actions (`start`, `stop`, `reboot`).
-
----
+This plugin backend was templated using the Backstage CLI. You should replace this text with a description of your plugin backend.
 
 ## Installation
 
-To install the frontend plugin, run:
+This plugin is installed via the `@infosys_ltd/resource-actionhub-backend` package. To install it to your backend package, run the following command:
 
 ```bash
-yarn --cwd packages/app add @infosys_ltd/resource-actionhub
-```
-
-To install the backend plugin, run:
-
-```bash
+# From your root directory
 yarn --cwd packages/backend add @infosys_ltd/resource-actionhub-backend
 ```
 
----
+Then add the plugin to your backend in `packages/backend/src/index.ts`:
 
-## Configuration
-
-Set environment variables:
-
-```bash
-export AWS_ACCESS_KEY_ID="<your-access-key-id>"
-export AWS_SECRET_ACCESS_KEY="<your-secret-access-key>"
-export AWS_REGION="us-east-1"
+```ts
+const backend = createBackend();
+// ...
+backend.add(import('@infosys_ltd/resource-actionhub-backend'));
 ```
 
-3. Start Backstage:
+## Development
 
-```bash
-yarn start
-```
+This plugin backend can be started in a standalone mode from directly in this
+package with `yarn start`. It is a limited setup that is most convenient when
+developing the plugin backend itself.
 
-Open `http://localhost:3000/resource-actionhub`.
-
----
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for improvements or bug fixes.
-
----
-
-## License
-
-This project is licensed under the Apache License 2.0.
+If you want to run the entire project, including the frontend, run `yarn start` from the root directory.
