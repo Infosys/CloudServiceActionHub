@@ -35,7 +35,7 @@ export async function createRouter(
   // Validate that plugin configuration exists
   if (!pluginConfig) {
     logger.warn(
-      'Start Stop Hub plugin configuration is missing. ' +
+      'Cloud Reseorce Action Hub plugin configuration is missing. ' +
       'Please add the "resource-actionhub" section to your app-config.yaml file. ' +
       'Plugin will start but routes will return errors until configured.'
     );
@@ -55,7 +55,7 @@ export async function createRouter(
     },
   };
 
-  logger.info('Start Stop Hub plugin configured successfully');
+  logger.info('Cloud Reseorce Action Hub plugin configured successfully');
   // Make apiConfig globally accessible for handler functions
   (globalThis as any).apiConfig = apiConfig;
 
@@ -253,23 +253,23 @@ export async function createRouter(
 // --- Validation and handlers ---
 
 function validateRequest(request: ResourceExplorerRequest, _reqType: string | undefined): void {
-  if (_reqType == 'resources') {
+  if (_reqType === 'resources') {
     if (!request.provider) {
       throw new InputError('Provider is required');
     }
     if (!request.service) {
       throw new InputError('Service is required');
     }
-    if (!['AWS', 'Azure', 'GCP'].includes(request.provider) && _reqType == 'resources') {
+    if (!['AWS', 'Azure', 'GCP'].includes(request.provider) && _reqType === 'resources') {
       throw new InputError('Invalid provider. Must be AWS, Azure, or GCP');
     }
-    if (request.provider === 'AWS' && !['EC2', 'RDS'].includes(request.service) && _reqType == 'resources') {
+    if (request.provider === 'AWS' && !['EC2', 'RDS'].includes(request.service) && _reqType === 'resources') {
       throw new InputError('Invalid AWS service. Currently supported: EC2, RDS');
     }
-    if (request.provider === 'Azure' && !['VM'].includes(request.service) && _reqType == 'resources') {
+    if (request.provider === 'Azure' && !['VM'].includes(request.service) && _reqType === 'resources') {
       throw new InputError('Invalid Azure service. Currently supported: VM');
     }
-    if (request.provider === 'GCP' && !['Compute Engine (VM)'].includes(request.service) && _reqType == 'resources') {
+    if (request.provider === 'GCP' && !['Compute Engine (VM)'].includes(request.service) && _reqType === 'resources') {
       throw new InputError('Invalid GCP service. Currently supported: Compute Engine (VM)');
     }
   } else if (_reqType === 'ec2-action' || _reqType === 'rds-action' || _reqType === 'gcp-action') {
@@ -319,7 +319,7 @@ async function fetchAwsEc2Instances(
   const awsConfig = (globalThis as any).apiConfig?.aws || {};
   try {
     logger.info(`Listing EC2 instances using AWS SDK in region: ${request.region}`);
-    logger.info(`AWS credentials debug: accessKeyId: ${awsConfig.accessKeyId || '[not set]'}, secretAccessKey: ${awsConfig.secretAccessKey ? awsConfig.secretAccessKey.substring(0, 4) + '...' : '[not set]'}, region: ${awsConfig.region || request.region}`);
+    logger.info(`AWS credentials debug: accessKeyId: ${awsConfig.accessKeyId || '[not set]'}, secretAccessKey: ${awsConfig.secretAccessKey ? `${awsConfig.secretAccessKey.substring(0, 4)}...` : '[not set]'}, region: ${awsConfig.region || request.region}`);
     if (!awsConfig.accessKeyId || !awsConfig.secretAccessKey) {
       logger.error('AWS credentials are missing in config!');
     }

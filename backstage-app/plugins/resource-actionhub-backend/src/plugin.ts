@@ -5,7 +5,7 @@ import {
 import { createRouter } from './router';
 
 /**
- * Start Stop Hub backend plugin
+ * Cloud Reseorce Action Hub backend plugin
  *
  * @public
  */
@@ -20,7 +20,7 @@ export const resourceActionhubPlugin = createBackendPlugin({
         httpAuth: coreServices.httpAuth,
       },
       async init({ logger, config, httpRouter, httpAuth }) {
-        logger.info('Initializing Start Stop Hub backend plugin');
+        logger.info('Initializing Cloud Reseorce Action Hub backend plugin');
 
         // Set auth policies first, before mounting the router
         httpRouter.addAuthPolicy({
@@ -57,7 +57,7 @@ export const resourceActionhubPlugin = createBackendPlugin({
 
         httpRouter.use(router);
 
-        logger.info('Start Stop Hub backend plugin initialized successfully');
+        logger.info('Cloud Reseorce Action Hub backend plugin initialized successfully');
       },
     });
   },
