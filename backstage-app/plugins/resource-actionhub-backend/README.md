@@ -16,18 +16,28 @@ yarn --cwd packages/backend add @infosys_ltd/resource-actionhub-backend
 
 ### Backend Configuration
 
-Add backend plugin registration in `packages/backend/src/index.ts`:
+1. Add backend plugin registration in `packages/backend/src/index.ts`:
 
 ```ts
 backend.add(import('@infosys_ltd/resource-actionhub-backend'));
 ```
 
-Set backend environment variables:
+2. Add plugin configuration in `app-config.yaml`:
+
+```yaml
+resource-actionhub:
+	aws:
+		accessKeyId: ${AWS_ACCESS_KEY_ID}
+		secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+		region: ${AWS_REGION}
+```
+
+3. Set backend environment variables:
 
 ```bash
 export AWS_ACCESS_KEY_ID="<your-access-key-id>"
 export AWS_SECRET_ACCESS_KEY="<your-secret-access-key>"
-export AWS_REGION="us-east-1"
+export AWS_REGION="<your-region>"
 ```
 
 ### Frontend Configuration
@@ -47,6 +57,10 @@ yarn start
 ```
 
 Open `http://localhost:3000/resource-actionhub`.
+
+## Screenshot
+
+![alt text](image.png)
 
 ## Contributing
 
