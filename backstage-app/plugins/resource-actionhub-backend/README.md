@@ -26,10 +26,10 @@ backend.add(import('@infosys_ltd/resource-actionhub-backend'));
 
 ```yaml
 resource-actionhub:
-	aws:
-		accessKeyId: ${AWS_ACCESS_KEY_ID}
-		secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
-		region: ${AWS_REGION}
+  aws:
+    accessKeyId: ${AWS_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+    region: ${AWS_REGION}
 ```
 
 3. Set backend environment variables:
