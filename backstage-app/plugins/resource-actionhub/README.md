@@ -60,7 +60,7 @@ Open `http://localhost:3000/resource-actionhub`.
 
 ## Screenshot
 
-![alt text](image.png)
+![Cloud Resource Action Hub](./src/doc/resource-actionhub-screenshot.png)
 
 ## Contributing
 
