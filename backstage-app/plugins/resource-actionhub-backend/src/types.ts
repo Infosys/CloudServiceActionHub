@@ -149,6 +149,7 @@ export interface ResourceActionHubConfig {
   aws?: {
     accessKeyId?: string;
     secretAccessKey?: string;
+    sessionToken?: string;
     region?: string;
     ec2?: ApiEndpointConfig;
     rds?: ApiEndpointConfig;

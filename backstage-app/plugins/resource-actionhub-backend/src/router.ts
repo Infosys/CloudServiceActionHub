@@ -136,11 +136,12 @@ export async function createRouter(
 
   router.post('/getAllAwsRegions', async (_req, res) => {
     try {
-      const awsConfig = (globalThis as any).apiConfig?.aws || {};
+      const awsConfig = apiConfig?.aws || {};
       const awsRegion = awsConfig.region || 'us-east-1';
 
       if (!awsConfig.accessKeyId || !awsConfig.secretAccessKey) {
-        throw new InputError('AWS credentials are required to fetch regions');
+        logger.warn('AWS credentials not configured, returning empty regions list');
+        return res.json([]);
       }
 
       const client = new EC2Client({
@@ -148,6 +149,7 @@ export async function createRouter(
         credentials: {
           accessKeyId: awsConfig.accessKeyId,
           secretAccessKey: awsConfig.secretAccessKey,
+          sessionToken: awsConfig.sessionToken || undefined,
         },
       });
 
@@ -319,7 +321,7 @@ async function fetchAwsEc2Instances(
   const awsConfig = (globalThis as any).apiConfig?.aws || {};
   try {
     logger.info(`Listing EC2 instances using AWS SDK in region: ${request.region}`);
-    logger.info(`AWS credentials debug: accessKeyId: ${awsConfig.accessKeyId || '[not set]'}, secretAccessKey: ${awsConfig.secretAccessKey ? `${awsConfig.secretAccessKey.substring(0, 4)}...` : '[not set]'}, region: ${awsConfig.region || request.region}`);
+    logger.info(`AWS credentials debug: accessKeyId: ${awsConfig.accessKeyId || '[not set]'}, secretAccessKey: ${awsConfig.secretAccessKey ? `${awsConfig.secretAccessKey.substring(0, 4)}...` : '[not set]'}, sessionToken: ${awsConfig.sessionToken ? '[set]' : '[not set]'}, region: ${awsConfig.region || request.region}`);
     if (!awsConfig.accessKeyId || !awsConfig.secretAccessKey) {
       logger.error('AWS credentials are missing in config!');
     }
@@ -328,6 +330,7 @@ async function fetchAwsEc2Instances(
       credentials: {
         accessKeyId: awsConfig.accessKeyId || '',
         secretAccessKey: awsConfig.secretAccessKey || '',
+        sessionToken: awsConfig.sessionToken || undefined,
       },
     });
     const result: DescribeInstancesCommandOutput = await ec2.send(new DescribeInstancesCommand({}));
@@ -480,12 +483,19 @@ async function fetchAwsEc2InstancesStartStopReboot(
   request: ResourceExplorerRequest,
   logger: LoggerService,
 ): Promise<ResourceExplorerResponse> {
+  const awsConfig = (globalThis as any).apiConfig?.aws || {};
   if (!request.region || !request.instance_id || !request.action) {
     throw new InputError('Missing required EC2 action parameters (region, instance_id, action)');
   }
   try {
     logger.info(`Performing EC2 action '${request.action}' on instance '${request.instance_id}' in region '${request.region}'`);
-    const ec2 = new EC2Client({ region: request.region });
+    const ec2 = new EC2Client({
+      region: request.region,
+      credentials: {
+        accessKeyId: awsConfig.accessKeyId || '',
+        secretAccessKey: awsConfig.secretAccessKey || '',
+      },
+    });
     let result;
     if (request.action === 'start') {
       result = await ec2.send(new StartInstancesCommand({ InstanceIds: [request.instance_id] }));
