@@ -263,7 +263,7 @@ describe('createRouter', () => {
       appWithoutCreds.use(mockErrorHandler());
 
       const response = await request(appWithoutCreds).post('/getAllAwsRegions').send({});
-
+      console.log(`getAllAwsRegions response: ${JSON.stringify(response.body)}`);
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('AWS credentials are required to fetch regions');
     });
