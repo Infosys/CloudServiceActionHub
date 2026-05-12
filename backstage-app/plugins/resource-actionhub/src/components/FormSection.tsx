@@ -1,16 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField, InputAdornment } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import { useApi, discoveryApiRef, alertApiRef, identityApiRef, ProfileInfo } from '@backstage/core-plugin-api';
+import { useApi, discoveryApiRef, identityApiRef } from '@backstage/core-plugin-api';
 import { IconButton, Menu, Snackbar, Tooltip } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import useAsync from 'react-use/esm/useAsync';
-import { catalogApiRef } from '@backstage/plugin-catalog-react';
-import { UserEntity } from '@backstage/catalog-model';
+
 
 export function FormSection() {
   const identityApi = useApi(identityApiRef);
@@ -32,7 +30,7 @@ export function FormSection() {
   // UI state variables
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [_searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState('');
   const showFields = !!provider;
@@ -56,7 +54,7 @@ export function FormSection() {
   const [userID, setUserID] = useState('');
 
   // Styles for the refresh button
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles(_theme => ({
     circularOutline: {
       border: `2px solid #1473E6`,
       borderRadius: '50%',
@@ -88,7 +86,7 @@ export function FormSection() {
 
   // Pagination handlers
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    _event: React.MouseEvent<HTMLButtonElement>,
     newPage: number
   ) => {
     setPage(newPage);
@@ -429,7 +427,7 @@ const getColumnDisplayName = (columnKey: string, svc: string): string => {
             <Autocomplete
               options={projects}
               value={project}
-              onChange={(event, newValue) => setProject(newValue || '')}
+              onChange={(_event, newValue) => setProject(newValue || '')}
               disabled={!service || loadingAccounts}
               size="small"
               renderInput={(params) => (

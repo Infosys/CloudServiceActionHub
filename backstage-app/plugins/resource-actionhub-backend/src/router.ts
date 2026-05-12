@@ -394,7 +394,7 @@ async function fetchAwsRdsInstances(
       method: 'POST',
       headers,
       body: JSON.stringify(apiPayload),
-      timeout: endpointConfig.timeout || 30000,
+      signal: AbortSignal.timeout(endpointConfig.timeout || 30000),
     });
     if (!response.ok) {
       const errorText = await response.text();
@@ -449,7 +449,7 @@ async function fetchGcpComputeInstances(
       method: 'POST',
       headers,
       body: JSON.stringify(apiPayload),
-      timeout: endpointConfig.timeout || 30000,
+      signal: AbortSignal.timeout(endpointConfig.timeout || 30000),
     });
 
     if (!response.ok) {
@@ -546,7 +546,7 @@ async function fetchAwsRdsInstancesStartStopReboot(
       method: 'POST',
       headers,
       body: JSON.stringify(apiPayload),
-      timeout: endpointConfig.timeout || 30000,
+      signal: AbortSignal.timeout(endpointConfig.timeout || 30000),
     });
 
     logger.info(`RDS Action API Response Status: ${response.status}`);
@@ -559,7 +559,7 @@ async function fetchAwsRdsInstancesStartStopReboot(
       );
     }
 
-    const apiResponse = await response.json();
+    const apiResponse = await response.json() as { message?: string };
     logger.info(`RDS Action API Response: ${JSON.stringify(apiResponse)}`);
 
     return {
@@ -605,7 +605,7 @@ async function fetchGcpComputeInstanceAction(
       method: 'POST',
       headers,
       body: JSON.stringify(apiPayload),
-      timeout: endpointConfig.timeout || 30000,
+      signal: AbortSignal.timeout(endpointConfig.timeout || 30000),
     });
 
     logger.info(`GCP Action API Response Status: ${response.status}`);
@@ -618,7 +618,7 @@ async function fetchGcpComputeInstanceAction(
       );
     }
 
-    const apiResponse = await response.json();
+    const apiResponse = await response.json() as { message?: string };
     logger.info(`GCP Action API Response: ${JSON.stringify(apiResponse)}`);
 
     return {
